@@ -3,7 +3,7 @@ import GoalForm from '../components/GoalForm';
 
 export default function Home() {
   return (
-    <div className="bg-bgblack m-0 h-screen">
+    <div className="h-screen">
       <Head>
         <title>👊</title>
         <link rel="icon" href="/favicon.ico" />

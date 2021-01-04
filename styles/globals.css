@@ -1,3 +1,33 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html, body {
+  background-color: #1f2022;
+}
+
+.btn {
+  transition-duration: 0.5s;
+  transition-property: transform;
+  -webkit-tap-highlight-color: transparent;
+  transform: translateZ(0);
+  @apply px-8 py-2 font-bold rounded-xl text-white bg-bgblack focus:outline-none hover:shadow-2xl focus:ring-4 focus:ring-white focus:ring-opacity-75;
+}
+
+.btn:hover {
+  transform: translateY(-6px);
+  animation-name: hover;
+  animation-duration: 1.5s;
+  animation-delay: 0.3s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+.btn-blue {
+  @apply bg-blue-600;
+}
+
+.btn-danger {
+  @apply bg-red-600;
+}

@@ -1,3 +1,6 @@
-import { createState } from 'statedrive-react';
+import { atom } from "recoil";
 
-export const user = createState({initialValue: null});
+export const userAtom = atom({
+  key: "user",
+  default: { name: null, goal: null },
+});
