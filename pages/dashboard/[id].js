@@ -1,27 +1,57 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useToasts } from "react-toast-notifications";
 import Editor from "rich-markdown-editor";
-import { _newPost } from "../../utils/_functions";
-import { sampleStory } from "../../utils/__content";
+import { _getPost, _editPost, _deletePost } from "../../utils/_functions";
 import NProgress from "nprogress";
 
-export default function New() {
+export default function Post() {
   const [title, setTitle] = useState();
-  const [content, setContent] = useState(sampleStory);
+  const [content, setContent] = useState();
+  const [editing, setEditing] = useState(true);
+
   const router = useRouter();
   const { addToast } = useToasts();
 
-  const handleSubmit = () => {
+  const { id } = router.query;
+
+  useEffect(() => {
+    id &&
+      _getPost(id).then((post) => {
+        setTitle(post.title);
+        setContent(post.content);
+      });
+  }, [id]);
+
+  const handleEdit = () => {
+    if (editing) {
+      setEditing(false);
+    }
+    if (!editing) {
+      NProgress.start();
+      _editPost(id, title, content).then((res) => {
+        if (res) {
+          setEditing(true);
+          NProgress.done();
+          addToast("Story updated successfully", { appearance: "success" });
+        }
+      });
+    }
+  };
+
+  const handleDelete = () => {
     NProgress.start();
-    _newPost(title, content).then((res) => {
-      console.log(res);
-      if (res) NProgress.done();
-      addToast("Story saved successfully...", { appearance: "success" });
-      router.push("/dashboard");
+    _deletePost(id).then((res) => {
+      if (res) {
+        NProgress.done();
+        router.push("/dashboard");
+        addToast("Story deleted successfully", { appearance: "error" });
+      }
     });
   };
+  if (content === undefined || title === undefined) return null;
+
   return (
     <div className="h-full">
       <Head>
@@ -42,8 +72,8 @@ export default function New() {
             <div className="text-white text-4xl p-4">
               <Editor
                 defaultValue={title}
-                //   theme
                 placeholder="The heading of your story."
+                readOnly={editing}
                 onChange={(val) => setTitle(val())}
                 dark
               />
@@ -51,7 +81,8 @@ export default function New() {
             <div className="text-white text-xl p-4">
               <Editor
                 defaultValue={content}
-                placeholder="Your story begins from here..."
+                placeholder="The heading of your story."
+                readOnly={editing}
                 onChange={(val) => setContent(val())}
                 dark
               />
@@ -59,16 +90,11 @@ export default function New() {
           </div>
           <div className="p-8">
             <div className="flex flex-col space-y-4">
-              <button className="btn btn-blue" onClick={handleSubmit}>
-                Save
+              <button className="btn btn-blue" onClick={handleEdit}>
+                {editing ? "Edit" : "Save"}
               </button>
-              <button
-                className="btn btn-danger"
-                onClick={() => {
-                  router.push("/dashboard");
-                }}
-              >
-                Discard
+              <button className="btn btn-danger" onClick={handleDelete}>
+                Delete
               </button>
             </div>
           </div>

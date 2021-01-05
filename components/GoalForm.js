@@ -1,7 +1,7 @@
 import { useRecoilState } from "recoil";
-import { userAtom } from "../pages/_atoms";
+import { userAtom } from "../utils/_atoms";
 import { useRouter } from "next/router";
-import { _setUser } from "../pages/_functions";
+import { _setUser } from "../utils/_functions";
 
 export default function GoalForm() {
   const [user, setUser] = useRecoilState(userAtom);

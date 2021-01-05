@@ -17,7 +17,7 @@ const fallbackSet = (
 export class WebStore {
   readonly _dbp: Promise<IDBDatabase>;
   private storeName: string;
-  constructor(dbName = "fight-club", storeName = "tokenStore") {
+  constructor(dbName = "fight-club", storeName = "postsStore") {
     this.storeName = storeName;
     this._dbp = new Promise((resolve, reject) => {
       const openreq = indexedDB.open(dbName, 1);
